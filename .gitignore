@@ -5,3 +5,6 @@
 .DS_Store
 /build
 /captures
+ViewNote.iml
+app.iml
+/androidutils/androidutils.iml
