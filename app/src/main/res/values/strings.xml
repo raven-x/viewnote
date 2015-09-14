@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ViewNote</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="db_save_error">An error occurred while saving entry to database</string>
+    <string name="db_load_last_entry_error">An error occured while loading editable entry
+    from database</string>
+    <string name="title_activity_sound_record">SoundRecordActivity</string>
+</resources>

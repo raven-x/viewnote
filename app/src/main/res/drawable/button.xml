@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item  android:state_pressed="true" android:drawable="@drawable/button_pressed"/>
+    <item>
+        <layer-list>
+            <!-- Shadow layer -->
+            <item android:left="4dp" android:top="4dp">
+                <shape android:shape="oval">
+                    <size android:height="@dimen/button_size" android:width="@dimen/button_size"/>
+                    <solid android:color="#66000000"/>
+                </shape>
+            </item>
+
+            <!-- Content layer -->
+            <item android:drawable="@drawable/button_default"/>
+        </layer-list>
+    </item>
+</selector>
