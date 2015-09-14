@@ -2,6 +2,7 @@ package com.nr.viewnote.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -9,12 +10,15 @@ import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteEntity;
 import com.nr.androidutils.ToastUtils;
+
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_sound_record)
 public class SoundRecordActivity extends RoboActivity {
+
     @InjectView(R.id.btnRecordSound)
     private Button btnRecord;
 

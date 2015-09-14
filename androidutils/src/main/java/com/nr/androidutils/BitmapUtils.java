@@ -49,4 +49,13 @@ public final class BitmapUtils {
         byteBuffer.rewind();
         return byteBuffer.array();
     }
+
+    /**
+     * Converts compressed byte array to bitmap
+     * @param src source array
+     * @return result bitmap
+     */
+    public static Bitmap convertCompressedByteArrayToBitmap(byte[] src){
+        return BitmapFactory.decodeByteArray(src, 0, src.length);
+    }
 }

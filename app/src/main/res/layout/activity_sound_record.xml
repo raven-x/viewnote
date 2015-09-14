@@ -12,6 +12,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/note_text_background"
+              android:inputType="textMultiLine"
+              android:gravity="left|top"
         android:layout_marginBottom="10dp"/>
 
     <LinearLayout
