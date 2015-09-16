@@ -1,17 +1,17 @@
-package com.nr.viewnote.activities;
+package com.nr.viewnote.view;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.nr.androidutils.ActivityUtils;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteEntity;
 import com.nr.androidutils.ToastUtils;
 
-import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -40,12 +40,19 @@ public class SoundRecordActivity extends RoboActivity {
         btnRecord.setOnClickListener(v -> onRecordSound());
         btnApplyNote.setOnClickListener(v -> onApplyNote());
         btnCancelNote.setOnClickListener(v -> onCancelNote());
-    }
+        txtNoteText.addTextChangedListener(new TextWatcher() {
 
-    @Override
-      protected void onPause() {
-        super.onPause();
-        //TODO
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                onTextChangeListener();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
     }
 
     @Override
@@ -61,20 +68,39 @@ public class SoundRecordActivity extends RoboActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mNote != null){
+            String newText = txtNoteText.getText().toString();
+            if(!newText.isEmpty()){
+                mNote.setText(newText);
+            }
+            DbAdapter.getInstance(this).updateEntryText(mNote);
+        }
+    }
+
     private void onRecordSound(){
         //TODO
     }
 
     private void onApplyNote(){
-        //TODO
+        if(mNote != null) {
+            mNote.setText(txtNoteText.getText().toString());
+            DbAdapter.getInstance(this).updateEntryText(mNote);
+            ActivityUtils.goBackTo(this, MainActivity.class);
+        }
     }
 
     private void onCancelNote(){
         if(mNote != null){
             DbAdapter.getInstance(this).removeEntry(mNote);
         }
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
+        ActivityUtils.goBackTo(this, MainActivity.class);
+    }
+
+    private void onTextChangeListener(){
+        boolean bEnableApplyButton = !txtNoteText.getText().toString().isEmpty();
+        btnApplyNote.setEnabled(bEnableApplyButton);
     }
 }

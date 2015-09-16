@@ -1,4 +1,4 @@
-package com.nr.viewnote.activities;
+package com.nr.viewnote.view;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

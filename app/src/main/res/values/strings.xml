@@ -7,4 +7,9 @@
     <string name="db_load_last_entry_error">An error occured while loading editable entry
     from database</string>
     <string name="title_activity_sound_record">SoundRecordActivity</string>
+    <string name="title_activity_note_list">NoteListActivity</string>
+    <string name="title_activity_note">NoteActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

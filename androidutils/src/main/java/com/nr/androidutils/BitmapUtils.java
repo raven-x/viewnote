@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * Created by Limi on 10.09.2015.
+ * Bitmap utils
  */
 public final class BitmapUtils {
     private BitmapUtils(){}
