@@ -1,26 +1,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@color/background"
-                android:gravity="center"
-                tools:context=".MainActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/background"
+              android:gravity="center"
+              tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn_create_new"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
-        android:layout_gravity="center"
-        android:background="@drawable/button"
-        android:layout_marginBottom="@dimen/button_margin"
-        />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/note_text_background"/>
 
-    <Button
-        android:id="@+id/btn_view"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
-        android:layout_gravity="center"
-        android:background="@drawable/button"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_create_new"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_gravity="center"
+            android:background="@drawable/button"
+            android:layout_marginBottom="@dimen/button_margin"
+            android:layout_marginTop="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_view"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_gravity="center"
+            android:background="@drawable/button"/>
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

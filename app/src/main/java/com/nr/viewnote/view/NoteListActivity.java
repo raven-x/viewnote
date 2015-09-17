@@ -1,5 +1,6 @@
 package com.nr.viewnote.view;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +11,12 @@ import com.nr.viewnote.R;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
-@ContentView(R.layout.activity_note_list)
-public class NoteListActivity extends RoboActivity {
+public class NoteListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_note_list);
     }
 
     @Override

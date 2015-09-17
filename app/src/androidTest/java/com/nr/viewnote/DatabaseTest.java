@@ -27,8 +27,8 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testAddEntry() {
-        assertEquals(TestConst.TEST_ID1, mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.TEXT1));
-        assertEquals(TestConst.TEST_ID2, mDbAdapter.addEntry(TestConst.ENTRY2, TestConst.TEXT2));
+        assertEquals(TestConst.TEST_ID1, mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1));
+        assertEquals(TestConst.TEST_ID2, mDbAdapter.addEntry(TestConst.ENTRY2, TestConst.ENTRY1, TestConst.TEXT2));
 
         List<NoteEntity> result = mDbAdapter.getAllData();
         assertNotNull(result);
@@ -55,7 +55,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testRemoveEntry(){
-        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.TEXT1);
+        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1);
 
         List<NoteEntity> result = mDbAdapter.getAllData();
         assertNotNull(result);
@@ -71,7 +71,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testRemoveEntries(){
-        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.TEXT1);
+        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1);
 
         List<NoteEntity> result = mDbAdapter.getAllData();
         assertNotNull(result);
@@ -87,7 +87,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testUpdateEntry(){
-        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.TEXT1);
+        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1);
 
         List<NoteEntity> result = mDbAdapter.getAllData();
         assertNotNull(result);
@@ -110,7 +110,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testGetAllCursor(){
-        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.TEXT1);
+        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1);
 
         Cursor cursor = mDbAdapter.getAllCursor();
 
@@ -119,8 +119,8 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
     public void testGetLastData(){
-        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.TEXT1);
-        mDbAdapter.addEntry(TestConst.ENTRY2, TestConst.TEXT2);
+        mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1);
+        mDbAdapter.addEntry(TestConst.ENTRY2, TestConst.ENTRY1, TestConst.TEXT2);
 
         NoteEntity result = mDbAdapter.getLastEntry();
 
