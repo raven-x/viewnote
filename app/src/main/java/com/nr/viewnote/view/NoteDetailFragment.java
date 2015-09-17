@@ -9,17 +9,15 @@ import android.view.ViewGroup;
 
 import com.nr.viewnote.R;
 
+import roboguice.fragment.provided.RoboFragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NoteDetailFragment extends Fragment {
+public class NoteDetailFragment extends RoboFragment {
 
-
-    public NoteDetailFragment() {
-        // Required empty public constructor
-    }
-
+    public NoteDetailFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

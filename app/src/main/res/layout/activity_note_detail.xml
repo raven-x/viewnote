@@ -4,12 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    tools:context="com.nr.viewnote.view.NoteListFragment">
+    tools:context="com.nr.viewnote.view.NoteDetailActivity">
 
-    <ListView
-        android:id="@+id/lstNotes"
+    <fragment
+        android:id="@+id/note_details_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:choiceMode="multipleChoice"/>
+        android:name="com.nr.viewnote.view.NoteDetailFragment"
+        tools:layout="@layout/fragment_note_detail" />
 
 </LinearLayout>

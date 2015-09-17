@@ -5,12 +5,15 @@ import android.os.Bundle;
 
 import com.nr.viewnote.R;
 
-public class NoteActivity extends AppCompatActivity {
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+
+@ContentView(R.layout.activity_note_detail)
+public class NoteDetailActivity extends RoboActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note);
     }
 
 }

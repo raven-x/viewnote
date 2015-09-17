@@ -51,6 +51,17 @@ public final class BitmapUtils {
     }
 
     /**
+     * Resize bitmap
+     * @param bitmap
+     * @param width
+     * @param height
+     * @return scaled bitmap
+     */
+    public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height){
+        return Bitmap.createScaledBitmap(bitmap, width, height, false);
+    }
+
+    /**
      * Converts compressed byte array to bitmap
      * @param src source array
      * @return result bitmap

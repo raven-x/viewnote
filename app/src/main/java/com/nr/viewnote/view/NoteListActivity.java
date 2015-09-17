@@ -7,12 +7,15 @@ import android.view.MenuItem;
 
 import com.nr.viewnote.R;
 
-public class NoteListActivity extends AppCompatActivity {
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+
+@ContentView(R.layout.activity_note_list)
+public class NoteListActivity extends RoboActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note_list);
     }
 
     @Override

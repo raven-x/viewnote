@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,18 +62,20 @@ public class DbAdapter {
      * @param image
      * @return
      */
-    public synchronized long addEntry(byte[] image){
-        return addEntry(image, "");
+    public synchronized long addEntry(byte[] image, byte[] thumb){
+        return addEntry(image, thumb, "");
     }
 
     /**
      * Adds a new entry to database
      * @param image image data
+     * @param thumb thumb data
      * @param text text data
      */
-    public synchronized long addEntry(byte[] image, String text){
+    public synchronized long addEntry(byte[] image, byte[] thumb, String text){
         ContentValues cv = new ContentValues();
         cv.put(DbConst.COLUMN_PICTURE, image);
+        cv.put(DbConst.COLUMN_THUMBNAIL, thumb);
         cv.put(DbConst.COLUMN_TEXT, text);
         cv.put(DbConst.COLUMN_DATE, System.currentTimeMillis());
         return mDb.insert(DbConst.TABLE_NOTES, null, cv);
@@ -109,6 +110,7 @@ public class DbAdapter {
      * Returns all data as list
      * @return list of data
      */
+    @Deprecated
     public synchronized List<NoteEntity> getAllData(){
         Cursor cursor = getAllCursor();
         if(cursor == null){
@@ -119,13 +121,34 @@ public class DbAdapter {
             return result;
         }
         do{
-            result.add(getNoteEntity(cursor));
+            result.add(extractEntityForNoteList(cursor));
         }while (cursor.moveToNext());
         return result;
     }
 
+    @Deprecated
     public synchronized Cursor getAllCursor(){
         Cursor cursor = mDb.rawQuery(DbConst.Q_GET_ALL_DATA, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+            return cursor;
+        }
+        return null;
+    }
+
+    public synchronized Cursor getAllDataToShowInListCursor(){
+        Cursor cursor = mDb.rawQuery(DbConst.Q_GET_ALL_DATA, null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+            return cursor;
+        }
+        return null;
+    }
+
+    public synchronized Cursor getFromAndToCursor(int from, int to){
+        String query = String.format("%s %s, %s", DbConst.Q_SELECT_ENTRIES_FROM_AND_TO,
+                Integer.toString(from), Integer.toString(to));
+        Cursor cursor = mDb.rawQuery(query, null);
         if(cursor != null) {
             cursor.moveToFirst();
             return cursor;
@@ -152,11 +175,10 @@ public class DbAdapter {
         return new NoteEntity(cursor.getInt(0));
     }
 
-    @NonNull
-    private NoteEntity getNoteEntity(Cursor cursor) {
+    public static NoteEntity extractEntityForNoteList(Cursor cursor) {
         Calendar calendar = Calendar.getInstance();
         NoteEntity entity = new NoteEntity(cursor.getInt(0));
-        entity.setImage(cursor.getBlob(1));
+        entity.setThumb(cursor.getBlob(1));
         entity.setText(cursor.getString(2));
         calendar.setTimeInMillis(cursor.getLong(3));
         entity.setDate(calendar.getTime());

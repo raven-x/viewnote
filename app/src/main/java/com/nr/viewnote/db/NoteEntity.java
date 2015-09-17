@@ -8,6 +8,7 @@ import java.util.Date;
 public class NoteEntity {
     private final int mId;
     private byte[] mImage;
+    private byte[] mThumb;
     private String mText;
     private Date mDate;
 
@@ -45,5 +46,13 @@ public class NoteEntity {
 
     public void setDate(Date date) {
         mDate = date;
+    }
+
+    public byte[] getThumb() {
+        return mThumb;
+    }
+
+    public void setThumb(byte[] mThumb) {
+        this.mThumb = mThumb;
     }
 }

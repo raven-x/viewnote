@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.nr.androidutils.BitmapUtils;
+import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.androidutils.ToastUtils;
@@ -70,9 +71,11 @@ public class MainActivity extends RoboActivity {
     private void processBitmap(Intent data) {
         Bitmap bitmap = getBitmap(data);
         if (bitmap != null) {
+            Bitmap thumb = BitmapUtils.resizeBitmap(bitmap, Const.THUMB_SIZE, Const.THUMB_SIZE);
             long result = DbAdapter
                     .getInstance(this)
-                    .addEntry(BitmapUtils.convertBitmapToByteArray(bitmap));
+                    .addEntry(BitmapUtils.convertBitmapToByteArray(bitmap),
+                            BitmapUtils.convertBitmapToByteArray(thumb));
 
             if (result == -1) {
                 ToastUtils.showToastLong(this, R.string.db_save_error);
@@ -96,6 +99,6 @@ public class MainActivity extends RoboActivity {
     }
 
     private void onView(){
-        //TODO
+        startActivity(new Intent(this, NoteListActivity.class));
     }
 }
