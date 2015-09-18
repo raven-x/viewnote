@@ -5,12 +5,15 @@
     android:orientation="vertical"
     tools:context="com.nr.viewnote.view.NoteListFragment">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/lstNotes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:choiceMode="multipleChoice"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
+        />
 
 </LinearLayout>
