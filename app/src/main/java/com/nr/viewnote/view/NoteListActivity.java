@@ -11,12 +11,12 @@ import com.nr.viewnote.R;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
-public class NoteListActivity extends AppCompatActivity {
+@ContentView(R.layout.activity_note_list)
+public class NoteListActivity extends RoboActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note_list);
     }
 
     @Override
