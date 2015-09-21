@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -27,12 +28,16 @@ public class MainActivity extends RoboGuiceAppCompatActivity {
     @InjectView(R.id.btn_view)
     private Button mBtnView;
 
+    @InjectView(R.id.main_toolbar)
+    private Toolbar toolbar;
+
     static {RoboGuice.setUseAnnotationDatabases(false);}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar(toolbar);
         mBtnCreateNew.setOnClickListener(v -> onCreateNew());
         mBtnView.setOnClickListener(v -> onView());
     }

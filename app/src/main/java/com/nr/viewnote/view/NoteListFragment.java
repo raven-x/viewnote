@@ -5,10 +5,17 @@ import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,9 +26,12 @@ import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteCursorLoader;
 import com.nr.viewnote.db.NoteEntity;
+import com.nr.viewnote.db.NoteListAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 import roboguice.fragment.provided.RoboFragment;
 import roboguice.inject.InjectView;
@@ -33,6 +43,8 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     private ListView lstNotes;
 
     private NoteListAdapter adapter;
+
+    private final List<INoteListFragmentListener> mListeners = new LinkedList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +70,14 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
         * */
         adapter = new NoteListAdapter(getActivity(), null);
         lstNotes.setAdapter(adapter);
+        lstNotes.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        lstNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                fireOnItemLongClick(parent, view, position, id);
+                return false;
+            }
+        });
 
         //Init loader manager
         getActivity().getLoaderManager().initLoader(0, null, this);
@@ -76,31 +96,23 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {}
 
-    private class NoteListAdapter extends CursorAdapter{
+    public void addListener(INoteListFragmentListener listener){
+        mListeners.add(listener);
+    }
 
-        private final DateFormat df = new SimpleDateFormat("yyyy-MMMM-dd HH:mm:ss");
+    public void removeListener(INoteListFragmentListener listener){
+        mListeners.remove(listener);
+    }
 
-        public NoteListAdapter(Context context, Cursor c) {
-            super(context, c, true);
+    private void fireOnItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        for(INoteListFragmentListener listener : mListeners){
+            listener.onItemLongClick(parent, view, position, id);
         }
+    }
 
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            return inflater.inflate(R.layout.list_item_layout, null, false);
+    private void fireOnItemClick(AdapterView<?> parent, View view, int position, long id) {
+        for(INoteListFragmentListener listener : mListeners){
+            listener.onItemClick(parent, view, position, id);
         }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            ImageView imgView = (ImageView) view.findViewById(R.id.img_thumb);
-            TextView txtNote = (TextView) view.findViewById(R.id.txtNoteText);
-            TextView txtDate = (TextView) view.findViewById(R.id.txtDate);
-
-            NoteEntity note = DbAdapter.extractEntityForNoteList(cursor);
-            imgView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(note.getThumb()));
-            txtNote.setText(note.getText());
-            txtDate.setText(df.format(note.getDate()));
-        }
-
     }
 }
