@@ -18,8 +18,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-@ContentView(R.layout.activity_main)
-public class MainActivity extends RoboActivity {
+public class MainActivity extends RoboGuiceAppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @InjectView(R.id.btn_create_new)
@@ -33,6 +32,7 @@ public class MainActivity extends RoboActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         mBtnCreateNew.setOnClickListener(v -> onCreateNew());
         mBtnView.setOnClickListener(v -> onView());
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,12 +76,6 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {}
 
-    private class ViewHolder{
-        public ImageView imageView;
-        public TextView noteView;
-        public TextView dateView;
-    }
-
     private class NoteListAdapter extends CursorAdapter{
 
         private final DateFormat df = new SimpleDateFormat("yyyy-MMMM-dd HH:mm:ss");
@@ -106,5 +101,6 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
             txtNote.setText(note.getText());
             txtDate.setText(df.format(note.getDate()));
         }
+
     }
 }

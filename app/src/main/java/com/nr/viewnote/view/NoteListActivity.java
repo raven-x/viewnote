@@ -1,23 +1,37 @@
 package com.nr.viewnote.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.inject.Key;
 import com.nr.viewnote.R;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
+import java.util.HashMap;
+import java.util.Map;
 
-@ContentView(R.layout.activity_note_list)
-public class NoteListActivity extends RoboActivity {
+import roboguice.RoboGuice;
+import roboguice.activity.RoboActivity;
+import roboguice.activity.event.OnContentChangedEvent;
+import roboguice.activity.event.OnStopEvent;
+import roboguice.context.event.OnCreateEvent;
+import roboguice.context.event.OnDestroyEvent;
+import roboguice.event.EventManager;
+import roboguice.inject.ContentView;
+import roboguice.inject.RoboInjector;
+import roboguice.util.RoboContext;
+
+public class NoteListActivity extends RoboGuiceAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_note_list);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
