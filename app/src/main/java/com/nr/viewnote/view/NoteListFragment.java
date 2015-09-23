@@ -2,6 +2,7 @@ package com.nr.viewnote.view;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nr.androidutils.BitmapUtils;
+import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteCursorLoader;
@@ -74,19 +76,32 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
         lstNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                fireOnItemLongClick(parent, view, position, id);
-                return false;
+                return NoteListFragment.this.onItemLongClick(parent, view, position, id);
             }
         });
         lstNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                fireOnItemClick(parent, view, position, id);
+                NoteListFragment.this.onItemClick(parent, view, position, id);
             }
         });
 
         //Init loader manager
         getActivity().getLoaderManager().initLoader(0, null, this);
+    }
+
+    private boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        fireOnItemLongClick(parent, view, position, id);
+        return false;
+    }
+
+    private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Cursor currentCursor = (Cursor) lstNotes.getItemAtPosition(position);
+        NoteEntity noteEntity = DbAdapter.extractEntityForNoteList(currentCursor);
+        Intent intent = new Intent(getActivity(), NoteDetailActivity.class);
+        intent.putExtra(Const.ENTITY_ID, noteEntity.getId());
+        startActivity(intent);
+        fireOnItemClick(parent, view, position, id);
     }
 
     @Override

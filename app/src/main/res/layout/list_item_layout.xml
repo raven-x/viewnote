@@ -53,6 +53,7 @@
         android:layout_height="wrap_content"
         android:paddingRight="16dp"
         android:layout_centerVertical="true"
+        android:visibility="gone"
         />
 
 </RelativeLayout>

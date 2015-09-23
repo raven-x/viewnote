@@ -175,6 +175,18 @@ public class DbAdapter {
         return new NoteEntity(cursor.getInt(0));
     }
 
+    public synchronized NoteEntity getEntityToView(int id){
+        Cursor cursor = mDb.rawQuery(DbConst.Q_SELECT_ENTRY_TO_VIEW + id, null);
+        if(cursor == null || cursor.getCount() != 1){
+            return null;
+        }
+        cursor.moveToFirst();
+        NoteEntity result = new NoteEntity(id);
+        result.setImage(cursor.getBlob(1));
+        result.setText(cursor.getString(2));
+        return result;
+    }
+
     public static NoteEntity extractEntityForNoteList(Cursor cursor) {
         Calendar calendar = Calendar.getInstance();
         NoteEntity entity = new NoteEntity(cursor.getInt(0));

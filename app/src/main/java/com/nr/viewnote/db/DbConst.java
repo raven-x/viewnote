@@ -3,9 +3,11 @@ package com.nr.viewnote.db;
 /**
  * Database constants
  */
-public class DbConst {
-    public static final String DATABASE_NAME = "viewnote.db";
+public final class DbConst {
+    private DbConst(){}
+
     public static final int VERSION = 1;
+    public static final String DATABASE_NAME = "viewnote.db";
     public static final String TABLE_NOTES = "notes";
 
     //Columns
@@ -42,4 +44,10 @@ public class DbConst {
             "SELECT %s, %s, %s, %s FROM %s ORDER BY %s ASC LIMIT",
             COLUMN_ID, COLUMN_THUMBNAIL, COLUMN_TEXT, COLUMN_DATE,
             TABLE_NOTES, COLUMN_DATE);
+
+    /**Returns entry to view and edit*/
+    static final String Q_SELECT_ENTRY_TO_VIEW = String.format(
+            "SELECT %s, %s, %s FROM %s WHERE %s = ",
+            COLUMN_ID, COLUMN_PICTURE, COLUMN_TEXT, TABLE_NOTES,
+            COLUMN_ID);
 }

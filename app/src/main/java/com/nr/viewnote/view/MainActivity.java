@@ -56,11 +56,6 @@ public class MainActivity extends RoboGuiceAppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -92,8 +87,7 @@ public class MainActivity extends RoboGuiceAppCompatActivity {
 
     private Bitmap getBitmap(Intent data) {
         Bundle extras = data.getExtras();
-        Bitmap bitmap = (Bitmap) extras.get("data");
-        return bitmap;
+        return (Bitmap) extras.get("data");
     }
 
     private void onCreateNew(){

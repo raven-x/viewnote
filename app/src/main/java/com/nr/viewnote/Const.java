@@ -13,4 +13,5 @@ public final class Const {
 
     public static final String SMPL_DATE_FORMAT_STR = "yyyy-MMMM-dd HH:mm:ss";
     public static final DateFormat SMPL_DATE_FORMAT = new SimpleDateFormat(SMPL_DATE_FORMAT_STR);
+    public static final String ENTITY_ID = "entityId";
 }
