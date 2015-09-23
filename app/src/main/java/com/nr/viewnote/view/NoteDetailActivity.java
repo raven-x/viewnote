@@ -15,7 +15,6 @@ public class NoteDetailActivity extends RoboGuiceAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Inflate the layout for this fragment
         setContentView(R.layout.activity_note_detail);
     }
 

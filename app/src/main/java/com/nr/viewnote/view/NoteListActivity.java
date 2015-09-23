@@ -1,5 +1,8 @@
 package com.nr.viewnote.view;
 
+import android.app.Fragment;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 
+import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteEntity;
@@ -78,17 +82,27 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
+    public void onItemClick(AdapterView<?> parent, View view, NoteEntity entity, long id) {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Intent intent = new Intent(this, NoteDetailActivity.class);
+            intent.putExtra(Const.ENTITY_ID, entity.getId());
+            startActivity(intent);
+        }else{
+            NoteDetailFragment detailFragment = (NoteDetailFragment) getFragmentManager()
+                    .findFragmentById(R.id.note_details_fragment);
+            detailFragment.setView(entity.getId());
+        }
+    }
 
     @Override
-    public void onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemLongClick(AdapterView<?> parent, View view, NoteEntity entity, long id) {
         startMode(NoteListMode.REMOVE);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.chkNote);
         checkBox.setChecked(!checkBox.isChecked());
     }
 
     @Override
-    public void onItemCheckStateChanged(NoteEntity entity, View view, boolean isChecked) {
+    public void onItemCheckStateChanged(View view, NoteEntity entity, boolean isChecked) {
         if(isChecked){
             mCheckedNotes.add(entity);
         }else{

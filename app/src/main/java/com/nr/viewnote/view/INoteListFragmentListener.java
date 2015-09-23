@@ -10,9 +10,9 @@ import com.nr.viewnote.db.NoteEntity;
  */
 public interface INoteListFragmentListener {
 
-    void onItemClick(AdapterView<?> parent, View view, int position, long id);
+    void onItemClick(AdapterView<?> parent, View view, NoteEntity entity, long id);
 
-    void onItemLongClick(AdapterView<?> parent, View view, int position, long id);
+    void onItemLongClick(AdapterView<?> parent, View view, NoteEntity entity, long id);
 
-    void onItemCheckStateChanged(NoteEntity entity, View view, boolean isChecked);
+    void onItemCheckStateChanged(View view, NoteEntity entity, boolean isChecked);
 }

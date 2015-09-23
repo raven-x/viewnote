@@ -2,23 +2,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context="com.nr.viewnote.view.NoteListActivity">
 
-    <fragment
-        android:id="@+id/note_list_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.nr.viewnote.view.NoteListFragment"
-        tools:layout="@layout/fragment_note_list"
-        android:layout_weight="1"/>
+    <include layout="@layout/note_list_toolbar"/>
 
-    <fragment
-        android:id="@+id/note_details_fragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.nr.viewnote.view.NoteDetailFragment"
-        tools:layout="@layout/fragment_note_detail"
-        android:layout_weight="1"/>
+        android:orientation="horizontal">
+
+        <fragment
+            android:id="@+id/note_list_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.nr.viewnote.view.NoteListFragment"
+            tools:layout="@layout/fragment_note_list"
+            android:layout_weight="1"/>
+
+        <fragment
+            android:id="@+id/note_details_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.nr.viewnote.view.NoteDetailFragment"
+            tools:layout="@layout/fragment_note_detail"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
 </LinearLayout>

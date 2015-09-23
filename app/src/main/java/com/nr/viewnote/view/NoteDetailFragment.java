@@ -1,6 +1,7 @@
 package com.nr.viewnote.view;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -44,26 +45,47 @@ public class NoteDetailFragment extends RoboFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        editText.setEnabled(false);
+        //if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setOnCreate(savedInstanceState);
+        //}
+        imageView.setOnClickListener(v -> onImageClick(v));
+    }
 
+    private void setOnCreate(Bundle savedInstanceState) {
         if(getActivity().getIntent() != null && getActivity().getIntent().getExtras() != null) {
             id = getActivity().getIntent().getExtras().getInt(Const.ENTITY_ID);
-        }else{
-            if(savedInstanceState != null){
-                id = savedInstanceState.getInt(Const.ENTITY_ID);
-            }
+        }
+        if(id == null && savedInstanceState != null){
+            id = savedInstanceState.getInt(Const.ENTITY_ID);
         }
 
         if(id != null) {
-            NoteEntity entity = DbAdapter.getInstance(getActivity()).getEntityToView(id);
-            imageView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(entity.getImage()));
-            editText.setText(entity.getText());
+            setView();
         }
     }
 
+    private void setView() {
+        NoteEntity entity = DbAdapter.getInstance(getActivity()).getEntityToView(id);
+        imageView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(entity.getImage()));
+        editText.setText(entity.getText());
+        editText.setEnabled(true);
+    }
+
+    public void setView(int id){
+        this.id = id;
+        setView();
+    }
+
+    private void onImageClick(View v){
+        //TODO open image in fullscreen system app
+    }
+
     @Override
-    public void onPause() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(Const.ENTITY_ID, id);
-        super.onPause();
+    public void onSaveInstanceState(Bundle outState) {
+        if(id != null) {
+            outState.putInt(Const.ENTITY_ID, id);
+        }
+        super.onSaveInstanceState(outState);
     }
 }

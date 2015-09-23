@@ -54,9 +54,9 @@ public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnC
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         View parent = (View) buttonView.getParent();
-        NoteEntity en = (NoteEntity) parent.getTag();
+        NoteEntity entity = (NoteEntity) parent.getTag();
         if(listener != null){
-            listener.onItemCheckStateChanged(en, parent, isChecked);
+            listener.onItemCheckStateChanged(parent, entity, isChecked);
         }
     }
 

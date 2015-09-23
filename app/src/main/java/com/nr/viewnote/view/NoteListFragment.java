@@ -49,8 +49,7 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     private final List<INoteListFragmentListener> mListeners = new LinkedList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_note_list, container, false);
     }
 
@@ -96,12 +95,12 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     }
 
     private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Cursor currentCursor = (Cursor) lstNotes.getItemAtPosition(position);
-        NoteEntity noteEntity = DbAdapter.extractEntityForNoteList(currentCursor);
-        Intent intent = new Intent(getActivity(), NoteDetailActivity.class);
-        intent.putExtra(Const.ENTITY_ID, noteEntity.getId());
-        startActivity(intent);
         fireOnItemClick(parent, view, position, id);
+    }
+
+    private NoteEntity getNoteEntity(int position) {
+        Cursor currentCursor = (Cursor) lstNotes.getItemAtPosition(position);
+        return DbAdapter.extractEntityForNoteList(currentCursor);
     }
 
     @Override
@@ -145,13 +144,13 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
 
     private void fireOnItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         for(INoteListFragmentListener listener : mListeners){
-            listener.onItemLongClick(parent, view, position, id);
+            listener.onItemLongClick(parent, view, getNoteEntity(position), id);
         }
     }
 
     private void fireOnItemClick(AdapterView<?> parent, View view, int position, long id) {
         for(INoteListFragmentListener listener : mListeners){
-            listener.onItemClick(parent, view, position, id);
+            listener.onItemClick(parent, view, getNoteEntity(position), id);
         }
     }
 }
