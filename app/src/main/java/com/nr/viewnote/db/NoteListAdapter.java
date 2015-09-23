@@ -5,12 +5,16 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nr.androidutils.BitmapUtils;
+import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
+import com.nr.viewnote.view.INoteListFragmentListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,9 +22,9 @@ import java.text.SimpleDateFormat;
 /**
  * Created by vkirillov on 21.09.2015.
  */
-public class NoteListAdapter extends CursorAdapter {
+public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnCheckedChangeListener {
 
-    private final DateFormat df = new SimpleDateFormat("yyyy-MMMM-dd HH:mm:ss");
+    private INoteListFragmentListener listener;
 
     public NoteListAdapter(Context context, Cursor c) {
         super(context, c, true);
@@ -37,11 +41,26 @@ public class NoteListAdapter extends CursorAdapter {
         ImageView imgView = (ImageView) view.findViewById(R.id.img_thumb);
         TextView txtNote = (TextView) view.findViewById(R.id.txtNoteText);
         TextView txtDate = (TextView) view.findViewById(R.id.txtDate);
+        CheckBox checkBox  = (CheckBox) view.findViewById(R.id.chkNote);
 
         NoteEntity note = DbAdapter.extractEntityForNoteList(cursor);
         imgView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(note.getThumb()));
         txtNote.setText(note.getText());
-        txtDate.setText(df.format(note.getDate()));
+        txtDate.setText(Const.SMPL_DATE_FORMAT.format(note.getDate()));
+        view.setTag(note);
+        checkBox.setOnCheckedChangeListener(this);
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        View parent = (View) buttonView.getParent();
+        NoteEntity en = (NoteEntity) parent.getTag();
+        if(listener != null){
+            listener.onItemCheckStateChanged(en, parent, isChecked);
+        }
+    }
+
+    public void setListener(INoteListFragmentListener listener) {
+        this.listener = listener;
+    }
 }

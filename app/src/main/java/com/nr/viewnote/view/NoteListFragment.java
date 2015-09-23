@@ -78,9 +78,21 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
                 return false;
             }
         });
+        lstNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                fireOnItemClick(parent, view, position, id);
+            }
+        });
 
         //Init loader manager
         getActivity().getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        clearListeners();
     }
 
     @Override
@@ -93,15 +105,27 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
         adapter.swapCursor(cursor);
     }
 
+    private void clearListeners(){
+        adapter.setListener(null);
+        mListeners.clear();
+    }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {}
 
     public void addListener(INoteListFragmentListener listener){
+        adapter.setListener(listener);
         mListeners.add(listener);
     }
 
     public void removeListener(INoteListFragmentListener listener){
+        adapter.setListener(null);
         mListeners.remove(listener);
+    }
+
+    public void notifyDataSetChanged(){
+        getLoaderManager().restartLoader(0, null, this);
+        adapter.notifyDataSetChanged();
     }
 
     private void fireOnItemLongClick(AdapterView<?> parent, View view, int position, long id) {

@@ -1,59 +1,45 @@
 package com.nr.viewnote.view;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 
-import com.google.inject.Key;
 import com.nr.viewnote.R;
+import com.nr.viewnote.db.DbAdapter;
+import com.nr.viewnote.db.NoteEntity;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
-import roboguice.activity.event.OnContentChangedEvent;
-import roboguice.activity.event.OnStopEvent;
-import roboguice.context.event.OnCreateEvent;
-import roboguice.context.event.OnDestroyEvent;
-import roboguice.event.EventManager;
-import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
-import roboguice.inject.RoboInjector;
-import roboguice.util.RoboContext;
 
 public class NoteListActivity extends RoboGuiceAppCompatActivity implements INoteListFragmentListener {
 
     @InjectView(R.id.note_list_toolbar)
-    private Toolbar toolbar;
-
-    private NoteListFragment noteListFragment;
-
-    private MenuItem removeMenuItem;
-
+    private Toolbar mToolbar;
+    private NoteListFragment mNoteListFragment;
+    private MenuItem mRemoveMenuItem;
     private NoteListMode mMode;
+
+    private final Set<NoteEntity> mCheckedNotes = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
-        setSupportActionBar(toolbar);
-        noteListFragment = (NoteListFragment) getFragmentManager().findFragmentById(R.id.note_list_fragment);
-        noteListFragment.addListener(this);
+        setSupportActionBar(mToolbar);
+        mNoteListFragment = (NoteListFragment) getFragmentManager().findFragmentById(R.id.note_list_fragment);
+        mNoteListFragment.addListener(this);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_note_list, menu);
-        removeMenuItem = menu.findItem(R.id.menu_item_remove_note);
+        mRemoveMenuItem = menu.findItem(R.id.menu_item_remove_note);
         startMode(NoteListMode.NORMAL);
         return true;
     }
@@ -64,32 +50,54 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
 
         switch (id) {
             case R.id.menu_item_remove_note:
-                startMode(NoteListMode.NORMAL);
+                onItemsRemoved();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void onItemsRemoved() {
+        //TODO add splash dialog
+        DbAdapter.getInstance(this).removeEntries(mCheckedNotes);
+        mNoteListFragment.notifyDataSetChanged();
+        mCheckedNotes.clear();
+        startMode(NoteListMode.NORMAL);
+    }
+
     private void startMode(NoteListMode mode){
         switch (mode){
             case REMOVE:
-                removeMenuItem.setVisible(true);
+                mRemoveMenuItem.setVisible(true);
                 break;
             case NORMAL:
-                removeMenuItem.setVisible(false);
+                mRemoveMenuItem.setVisible(false);
                 break;
         }
         mMode = mode;
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
 
     @Override
     public void onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         startMode(NoteListMode.REMOVE);
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.chkNote);
+        checkBox.setChecked(!checkBox.isChecked());
+    }
+
+    @Override
+    public void onItemCheckStateChanged(NoteEntity entity, View view, boolean isChecked) {
+        if(isChecked){
+            mCheckedNotes.add(entity);
+        }else{
+            mCheckedNotes.remove(entity);
+        }
+        if(mCheckedNotes.isEmpty()){
+            startMode(NoteListMode.NORMAL);
+        }else{
+            startMode(NoteListMode.REMOVE);
+        }
     }
 }
