@@ -1,15 +1,13 @@
 package com.nr.viewnote.view;
 
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nr.androidutils.BitmapUtils;
 import com.nr.viewnote.Const;
@@ -23,14 +21,18 @@ import roboguice.inject.InjectView;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Portions of image scaling code taken from
+ * https://androidcookbook.com/Recipe.seam?recipeId=2273
+ *
  */
 public class NoteDetailFragment extends RoboFragment {
 
     @InjectView(R.id.imgNoteImage)
-    private ImageView imageView;
+    private ScaleImageView imageView;
 
     @InjectView(R.id.txtNoteText)
-    private EditText editText;
+    private TextView editText;
 
     private Integer id;
 
@@ -46,10 +48,8 @@ public class NoteDetailFragment extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         editText.setEnabled(false);
-        //if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setOnCreate(savedInstanceState);
-        //}
-        imageView.setOnClickListener(v -> onImageClick(v));
+        editText.setMovementMethod(new ScrollingMovementMethod());
+        setOnCreate(savedInstanceState);
     }
 
     private void setOnCreate(Bundle savedInstanceState) {
@@ -75,10 +75,6 @@ public class NoteDetailFragment extends RoboFragment {
     public void setView(int id){
         this.id = id;
         setView();
-    }
-
-    private void onImageClick(View v){
-        //TODO open image in fullscreen system app
     }
 
     @Override
