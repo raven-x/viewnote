@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nr.androidutils.BitmapUtils;
+import com.nr.androidutils.progressdialog.RetainedTaskFragment;
 import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
@@ -57,16 +58,8 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        lstNotes.setOnScrollListener(new EndlessScrollListener() {
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                //TODO
-            }
-
-        });
-
-        /*Set cursor as null - it will be initialized later
+        /*
+          Set cursor as null - it will be initialized later
           in cursor loader callback
         * */
         adapter = new NoteListAdapter(getActivity(), null);

@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 
+import com.nr.androidutils.progressdialog.AbstractProcedureWithProgressDialog;
+import com.nr.androidutils.progressdialog.RetainedTaskFragment;
 import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
@@ -28,12 +30,14 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     private NoteListFragment mNoteListFragment;
     private MenuItem mRemoveMenuItem;
     private NoteListMode mMode;
+    private RetainedTaskFragment mRetainedTaskFragment;
 
     private final Set<NoteEntity> mCheckedNotes = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mRetainedTaskFragment = RetainedTaskFragment.establishRetainedMonitoredFragment(this);
         setContentView(R.layout.activity_note_list);
         setSupportActionBar(mToolbar);
         mNoteListFragment = (NoteListFragment) getFragmentManager().findFragmentById(R.id.note_list_fragment);
@@ -62,11 +66,7 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     }
 
     private void onItemsRemoved() {
-        //TODO add splash dialog
-        DbAdapter.getInstance(this).removeEntries(mCheckedNotes);
-        mNoteListFragment.notifyDataSetChanged();
-        mCheckedNotes.clear();
-        startMode(NoteListMode.NORMAL);
+        new DeleteItemTask(mRetainedTaskFragment).execute();
     }
 
     private void startMode(NoteListMode mode){
@@ -83,7 +83,7 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, NoteEntity entity, long id) {
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if(Configuration.ORIENTATION_PORTRAIT == getResources().getConfiguration().orientation) {
             Intent intent = new Intent(this, NoteDetailActivity.class);
             intent.putExtra(Const.ENTITY_ID, entity.getId());
             startActivity(intent);
@@ -112,6 +112,30 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
             startMode(NoteListMode.NORMAL);
         }else{
             startMode(NoteListMode.REMOVE);
+        }
+    }
+
+    /**
+     * Delete item task
+     */
+    private class DeleteItemTask extends AbstractProcedureWithProgressDialog{
+
+        public DeleteItemTask(RetainedTaskFragment retainedFragment) {
+            super(retainedFragment, "", "", DeleteItemTask.class.getSimpleName(), false);
+        }
+
+        @Override
+        protected Object doInBackground(Object ... params) {
+            DbAdapter.getInstance(NoteListActivity.this).removeEntries(mCheckedNotes);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object integer) {
+            super.onPostExecute(integer);
+            mNoteListFragment.notifyDataSetChanged();
+            mCheckedNotes.clear();
+            startMode(NoteListMode.NORMAL);
         }
     }
 }
