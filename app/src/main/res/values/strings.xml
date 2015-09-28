@@ -5,6 +5,7 @@
     <string name="title_activity_sound_record">Current note</string>
     <string name="title_activity_note_list">Notes</string>
     <string name="title_activity_note">Note view</string>
+    <string name="title_removing_entries">Removing entries ...</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
