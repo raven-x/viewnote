@@ -10,9 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-/**
- * Created by vkirillov on 25.09.2015.
- */
 public class ScaleImageView extends ImageView implements View.OnTouchListener {
     private Context mContext;
     private float MAX_SCALE = 2f;

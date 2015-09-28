@@ -2,11 +2,13 @@
     <string name="app_name">ViewNote</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_sound_record">Current note</string>
+    <string name="title_activity_sound_record">Note text record</string>
     <string name="title_activity_note_list">Notes</string>
     <string name="title_activity_note">Note view</string>
     <string name="title_removing_entries">Removing entries ...</string>
     <string name="title_dictate_note">Dictate a note text</string>
+    <string name="title_saving_note_text">Saving note text ...</string>
+    <string name="title_removing_note">Removing note entry ...</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

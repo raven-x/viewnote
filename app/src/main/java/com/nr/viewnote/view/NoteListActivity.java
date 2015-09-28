@@ -33,7 +33,6 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     private RetainedTaskFragment mRetainedTaskFragment;
     private final Set<NoteEntity> mCheckedNotes = new HashSet<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +65,7 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     }
 
     private void onItemsRemoved() {
-        new DeleteItemTask(mRetainedTaskFragment).execute();
+        new DeleteItemTask().execute();
     }
 
     private void startMode(NoteListMode mode){
@@ -120,8 +119,8 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
      */
     private class DeleteItemTask extends AbstractProcedureWithProgressDialog{
 
-        public DeleteItemTask(RetainedTaskFragment retainedFragment) {
-            super(retainedFragment,
+        public DeleteItemTask() {
+            super(mRetainedTaskFragment,
                     getResources().getString(R.string.title_removing_entries),
                     getResources().getString(R.string.title_removing_entries),
                     DeleteItemTask.class.getSimpleName(), false);

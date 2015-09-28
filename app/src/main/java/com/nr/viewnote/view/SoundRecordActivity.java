@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.nr.androidutils.ActivityUtils;
+import com.nr.androidutils.progressdialog.AbstractProcedureWithProgressDialog;
+import com.nr.androidutils.progressdialog.RetainedTaskFragment;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteEntity;
@@ -20,12 +23,9 @@ import com.nr.androidutils.ToastUtils;
 import java.util.List;
 import java.util.Locale;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-@ContentView(R.layout.activity_sound_record)
-public class SoundRecordActivity extends RoboActivity {
+public class SoundRecordActivity extends RoboGuiceAppCompatActivity {
     private static final int REQ_CODE_SPEECH_INPUT = 100;
 
     @InjectView(R.id.btnRecordSound)
@@ -40,11 +40,19 @@ public class SoundRecordActivity extends RoboActivity {
     @InjectView(R.id.txtNoteText)
     private EditText txtNoteText;
 
+    @InjectView(R.id.common_toolbar)
+    private Toolbar mToolbar;
+
     private NoteEntity mNote;
+
+    private RetainedTaskFragment mRetainedTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sound_record);
+        setSupportActionBar(mToolbar);
+        mRetainedTaskFragment = RetainedTaskFragment.establishRetainedMonitoredFragment(this);
         btnApplyNote.setEnabled(false);
         btnRecord.setOnClickListener(v -> onRecordSound());
         btnApplyNote.setOnClickListener(v -> onApplyNote());
@@ -124,16 +132,12 @@ public class SoundRecordActivity extends RoboActivity {
     private void onApplyNote(){
         if(mNote != null) {
             mNote.setText(txtNoteText.getText().toString());
-            DbAdapter.getInstance(this).updateEntryText(mNote);
-            ActivityUtils.goBackTo(this, MainActivity.class);
+            new ApplyNoteTask(mNote).execute();
         }
     }
 
     private void onCancelNote(){
-        if(mNote != null){
-            DbAdapter.getInstance(this).removeEntry(mNote);
-        }
-        ActivityUtils.goBackTo(this, MainActivity.class);
+        new CancelNoteTask(mNote).execute();
     }
 
     private void onTextChangeListener(){
@@ -142,5 +146,55 @@ public class SoundRecordActivity extends RoboActivity {
 
     private void updateViewState() {
         btnApplyNote.setEnabled(!txtNoteText.getText().toString().isEmpty());
+    }
+
+    private class ApplyNoteTask extends AbstractProcedureWithProgressDialog{
+        private final NoteEntity mNoteEntry;
+
+        public ApplyNoteTask(NoteEntity noteEntry) {
+            super(mRetainedTaskFragment,
+                    getResources().getString(R.string.title_saving_note_text),
+                    getResources().getString(R.string.title_saving_note_text),
+                    ApplyNoteTask.class.getSimpleName(), false);
+            mNoteEntry = noteEntry;
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            DbAdapter.getInstance(SoundRecordActivity.this).updateEntryText(mNoteEntry);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object integer) {
+            super.onPostExecute(integer);
+            ActivityUtils.goBackTo(SoundRecordActivity.this, MainActivity.class);
+        }
+    }
+
+    private class CancelNoteTask extends AbstractProcedureWithProgressDialog{
+        private final NoteEntity mNoteEntry;
+
+        public CancelNoteTask(NoteEntity noteEntry) {
+            super(mRetainedTaskFragment,
+                    getResources().getString(R.string.title_removing_note),
+                    getResources().getString(R.string.title_removing_note),
+                    ApplyNoteTask.class.getSimpleName(), false);
+            mNoteEntry = noteEntry;
+        }
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            if(mNoteEntry != null){
+                DbAdapter.getInstance(SoundRecordActivity.this).removeEntry(mNoteEntry);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object integer) {
+            super.onPostExecute(integer);
+            ActivityUtils.goBackTo(SoundRecordActivity.this, MainActivity.class);
+        }
     }
 }
