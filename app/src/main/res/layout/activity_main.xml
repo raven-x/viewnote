@@ -20,7 +20,7 @@
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
             android:layout_gravity="center"
-            android:background="@drawable/button"
+            android:background="@drawable/button_take_photo"
             android:layout_marginBottom="@dimen/button_margin"
             android:layout_marginTop="10dp"
             />
@@ -30,7 +30,7 @@
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
             android:layout_gravity="center"
-            android:background="@drawable/button"/>
+            android:background="@drawable/button_take_photo"/>
     </LinearLayout>
 
 </LinearLayout>
