@@ -2,11 +2,11 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:background="@color/background"
               android:gravity="center"
-              tools:context=".MainActivity">
+              tools:context=".MainActivity"
+    android:id="@+id/">
 
     <include layout="@layout/main_toolbar"/>
 
@@ -15,22 +15,34 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_view"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_gravity="center"
-            android:background="@drawable/button_show_notes"
-            android:layout_marginBottom="@dimen/button_margin"
-            android:layout_marginTop="10dp"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
 
-        <Button
-            android:id="@+id/btn_create_new"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_gravity="center"
-            android:background="@drawable/button_take_photo"/>
+            <Button
+                android:id="@+id/btn_view"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:background="@drawable/button_show_notes"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_create_new"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:background="@drawable/button_take_photo"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
