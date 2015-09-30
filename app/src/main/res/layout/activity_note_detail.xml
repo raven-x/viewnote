@@ -6,6 +6,8 @@
     android:background="@color/background"
     tools:context="com.nr.viewnote.view.NoteDetailActivity">
 
+    <include layout="@layout/common_toolbar"/>
+
     <fragment
         android:id="@+id/note_details_fragment"
         android:layout_width="match_parent"

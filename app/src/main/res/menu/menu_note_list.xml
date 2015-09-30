@@ -4,6 +4,14 @@
     tools:context="com.nr.viewnote.view.NoteListActivity">
 
     <item
+        android:id="@+id/action_search"
+        android:title="search"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        />
+
+    <item
         android:id="@+id/menu_item_remove_note"
         android:title="Delete"
         app:showAsAction="ifRoom"

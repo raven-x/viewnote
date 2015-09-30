@@ -6,8 +6,6 @@
     android:background="@color/background"
     tools:context="com.nr.viewnote.view.NoteDetailFragment">
 
-    <include layout="@layout/main_toolbar"/>
-
     <com.nr.viewnote.view.ScaleImageView
         android:id="@+id/imgNoteImage"
         android:layout_width="match_parent"
