@@ -2,4 +2,8 @@
 <resources>
     <color name="background">#a3eaa7</color>
     <color name="note_text_background">#c0fec2</color>
+    <color name="button_default_layer">#4cb99f</color>
+    <color name="button_pressed_layer">#346955</color>
+    <color name="button_shadow_layer">#66000000</color>
+    <color name="toolbar">#ff669900</color>
 </resources>

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/androidutils/androidutils.iml" filepath="$PROJECT_DIR$/androidutils/androidutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/com.nr.viewnote.iml" filepath="$PROJECT_DIR$/com.nr.viewnote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/viewnote.iml" filepath="$PROJECT_DIR$/viewnote.iml" />
     </modules>
   </component>
 </project>

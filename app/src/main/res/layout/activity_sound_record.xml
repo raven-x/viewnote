@@ -16,7 +16,7 @@
         android:background="@color/note_text_background"
               android:inputType="textMultiLine"
               android:gravity="left|top"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/note_editing_textbox_bottom_margin"/>
 
     <LinearLayout
         android:layout_width="match_parent"

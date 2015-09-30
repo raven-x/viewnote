@@ -4,4 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="button_size">200dp</dimen>
     <dimen name="button_margin">70dp</dimen>
+    <dimen name="button_shadow_layer_left_margin">6dp</dimen>
+    <dimen name="button_shadow_layer_top_margin">6dp</dimen>
+    <dimen name="note_editing_textbox_bottom_margin">10dp</dimen>
+    <dimen name="note_view_textbox_margin">2dp</dimen>
+    <dimen name="toolbar_min_height">56dp</dimen>
 </resources>
