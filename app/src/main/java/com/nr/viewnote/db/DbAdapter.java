@@ -63,7 +63,7 @@ public class DbAdapter {
      * @return
      */
     public synchronized long addEntry(byte[] image, byte[] thumb){
-        return addEntry(image, thumb, "");
+        return addEntry(image, thumb, "" );
     }
 
     /**
@@ -93,7 +93,7 @@ public class DbAdapter {
             ids.append(entity.getId()).append(",");
         }
         ids.setLength(ids.length() - 1);
-        ids.append(")");
+        ids.append(")" );
         return mDb.delete(DbConst.TABLE_NOTES,
                 String.format(DbConst.IN_EXPRESSION, DbConst.COLUMN_ID, ids.toString()), null);
     }
@@ -137,12 +137,25 @@ public class DbAdapter {
     }
 
     public synchronized Cursor getAllDataToShowInListCursor(){
-        Cursor cursor = mDb.rawQuery(DbConst.Q_GET_ALL_DATA, null);
-        if(cursor != null) {
-            cursor.moveToFirst();
-            return cursor;
-        }
-        return null;
+        return mDb.query(
+                false,
+                DbConst.TABLE_NOTES,
+                new String[]{
+                        DbConst.COLUMN_ID, DbConst.COLUMN_THUMBNAIL,
+                        DbConst.COLUMN_TEXT, DbConst.COLUMN_DATE},
+                null, null, null, null, null, null);
+    }
+
+    public synchronized Cursor getFilteredData(String constraint){
+        return mDb.query(
+                false,
+                DbConst.TABLE_NOTES,
+                new String[]{
+                        DbConst.COLUMN_ID, DbConst.COLUMN_THUMBNAIL,
+                        DbConst.COLUMN_TEXT, DbConst.COLUMN_DATE},
+                DbConst.COLUMN_TEXT + " LIKE ?",
+                new String[]{"%" + constraint + "%"},
+                null, null, null, null);
     }
 
     public synchronized Cursor getFromAndToCursor(int from, int to){
@@ -189,11 +202,15 @@ public class DbAdapter {
 
     public static NoteEntity extractEntityForNoteList(Cursor cursor) {
         Calendar calendar = Calendar.getInstance();
-        NoteEntity entity = new NoteEntity(cursor.getInt(0));
-        entity.setThumb(cursor.getBlob(1));
-        entity.setText(cursor.getString(2));
-        calendar.setTimeInMillis(cursor.getLong(3));
-        entity.setDate(calendar.getTime());
-        return entity;
+        if(cursor.getCount() > 0) {
+            NoteEntity entity = new NoteEntity(cursor.getInt(0));
+            entity.setThumb(cursor.getBlob(1));
+            entity.setText(cursor.getString(2));
+            calendar.setTimeInMillis(cursor.getLong(3));
+            entity.setDate(calendar.getTime());
+            return entity;
+        }else{
+            return null;
+        }
     }
 }

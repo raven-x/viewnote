@@ -1,9 +1,10 @@
 package com.nr.viewnote.view;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     private Toolbar mToolbar;
     private NoteListFragment mNoteListFragment;
     private MenuItem mRemoveMenuItem;
+    private MenuItem mSearchMenuItem;
+    private SearchView mSearchView;
     private NoteListMode mMode;
     private RetainedTaskFragment mRetainedTaskFragment;
     private final Set<NoteEntity> mCheckedNotes = new HashSet<>();
@@ -47,6 +50,11 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_note_list, menu);
         mRemoveMenuItem = menu.findItem(R.id.menu_item_remove_note);
+        mRemoveMenuItem.setVisible(false);
+        mSearchMenuItem = menu.findItem(R.id.menu_item_search_note);
+        mSearchView = (SearchView) mSearchMenuItem.getActionView();
+        mSearchView.setOnQueryTextListener(new SearchViewListener());
+        MenuItemCompat.setOnActionExpandListener(mSearchMenuItem, new ActionExpandListener());
         startMode(NoteListMode.NORMAL);
         return true;
     }
@@ -70,14 +78,14 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
 
     private void startMode(NoteListMode mode){
         switch (mode){
-            case REMOVE:
-                mRemoveMenuItem.setVisible(true);
-                break;
             case NORMAL:
-                mRemoveMenuItem.setVisible(false);
+                mSearchMenuItem.setVisible(true);
+                break;
+            case FILTER:
                 break;
         }
         mMode = mode;
+        updateViewState();
     }
 
     @Override
@@ -95,7 +103,6 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
 
     @Override
     public void onItemLongClick(AdapterView<?> parent, View view, NoteEntity entity, long id) {
-        startMode(NoteListMode.REMOVE);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.chkNote);
         checkBox.setChecked(!checkBox.isChecked());
     }
@@ -107,10 +114,54 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
         }else{
             mCheckedNotes.remove(entity);
         }
-        if(mCheckedNotes.isEmpty()){
-            startMode(NoteListMode.NORMAL);
+        updateViewState();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(NoteListMode.FILTER == mMode){
+            mSearchMenuItem.collapseActionView();
         }else{
-            startMode(NoteListMode.REMOVE);
+            super.onBackPressed();
+        }
+    }
+
+    private void updateViewState() {
+        mRemoveMenuItem.setVisible(!mCheckedNotes.isEmpty());
+    }
+
+    /**
+     * Action search item expand listener
+     */
+    private class ActionExpandListener implements MenuItemCompat.OnActionExpandListener{
+
+        @Override
+        public boolean onMenuItemActionExpand(MenuItem item) {
+            startMode(NoteListMode.FILTER);
+            return true;
+        }
+
+        @Override
+        public boolean onMenuItemActionCollapse(MenuItem item) {
+            startMode(NoteListMode.NORMAL);
+            return true;
+        }
+    }
+
+    /**
+     * Search view listener
+     */
+    private class SearchViewListener implements SearchView.OnQueryTextListener{
+
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            mNoteListFragment.filter(newText);
+            return false;
         }
     }
 

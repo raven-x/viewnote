@@ -55,4 +55,20 @@ public class NoteEntity {
     public void setThumb(byte[] mThumb) {
         this.mThumb = mThumb;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NoteEntity entity = (NoteEntity) o;
+
+        return mId == entity.mId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return mId;
+    }
 }

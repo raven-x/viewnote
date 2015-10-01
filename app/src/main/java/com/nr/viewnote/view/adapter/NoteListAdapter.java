@@ -1,4 +1,4 @@
-package com.nr.viewnote.db;
+package com.nr.viewnote.view.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -14,15 +14,17 @@ import android.widget.TextView;
 import com.nr.androidutils.BitmapUtils;
 import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
+import com.nr.viewnote.db.DbAdapter;
+import com.nr.viewnote.db.NoteEntity;
 import com.nr.viewnote.view.INoteListFragmentListener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by vkirillov on 21.09.2015.
  */
-public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnCheckedChangeListener {
+public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnCheckedChangeListener{
 
     private INoteListFragmentListener listener;
 
@@ -44,11 +46,13 @@ public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnC
         CheckBox checkBox  = (CheckBox) view.findViewById(R.id.chkNote);
 
         NoteEntity note = DbAdapter.extractEntityForNoteList(cursor);
-        imgView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(note.getThumb()));
-        txtNote.setText(note.getText());
-        txtDate.setText(Const.SMPL_DATE_FORMAT.format(note.getDate()));
-        view.setTag(note);
-        checkBox.setOnCheckedChangeListener(this);
+        if(note != null) {
+            imgView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(note.getThumb()));
+            txtNote.setText(note.getText());
+            txtDate.setText(Const.SMPL_DATE_FORMAT.format(note.getDate()));
+            view.setTag(note);
+            checkBox.setOnCheckedChangeListener(this);
+        }
     }
 
     @Override

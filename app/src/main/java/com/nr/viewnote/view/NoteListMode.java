@@ -1,9 +1,9 @@
 package com.nr.viewnote.view;
 
 /**
- * Created by vkirillov on 21.09.2015.
+ * Note list activity state
  */
 public enum NoteListMode {
     NORMAL,
-    REMOVE
+    FILTER
 }

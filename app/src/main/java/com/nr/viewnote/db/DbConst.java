@@ -28,6 +28,7 @@ public final class DbConst {
                     TABLE_NOTES, COLUMN_ID, COLUMN_PICTURE,
                     COLUMN_THUMBNAIL, COLUMN_TEXT, COLUMN_DATE);
     static final String Q_DROP_NOTES_TABLE = String.format("DROP TABLE IF EXISTS %s", TABLE_NOTES);
+
     static final String Q_GET_ALL_DATA = String.format("SELECT %s, %s, %s, %s FROM %s",
             COLUMN_ID, COLUMN_THUMBNAIL, COLUMN_TEXT, COLUMN_DATE, TABLE_NOTES);
 

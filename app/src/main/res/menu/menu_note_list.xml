@@ -4,7 +4,7 @@
     tools:context="com.nr.viewnote.view.NoteListActivity">
 
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/menu_item_search_note"
         android:title="search"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="always|collapseActionView"

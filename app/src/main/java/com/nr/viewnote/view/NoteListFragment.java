@@ -1,38 +1,23 @@
 package com.nr.viewnote.view;
 
 import android.app.LoaderManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
-import android.widget.ImageView;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.nr.androidutils.BitmapUtils;
-import com.nr.androidutils.progressdialog.RetainedTaskFragment;
-import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
 import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteCursorLoader;
 import com.nr.viewnote.db.NoteEntity;
-import com.nr.viewnote.db.NoteListAdapter;
+import com.nr.viewnote.view.adapter.NoteListAdapter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,6 +48,9 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
           in cursor loader callback
         * */
         adapter = new NoteListAdapter(getActivity(), null);
+        adapter.setFilterQueryProvider(constraint -> DbAdapter
+                .getInstance(NoteListFragment.this.getActivity())
+                .getFilteredData(constraint.toString()));
         lstNotes.setAdapter(adapter);
         lstNotes.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         lstNotes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -109,7 +97,7 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        adapter.swapCursor(cursor);
+        adapter.changeCursor(cursor);
     }
 
     private void clearListeners(){
@@ -133,6 +121,10 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     public void notifyDataSetChanged(){
         getLoaderManager().restartLoader(0, null, this);
         adapter.notifyDataSetChanged();
+    }
+
+    public void filter(CharSequence constraint){
+        adapter.getFilter().filter(constraint);
     }
 
     private void fireOnItemLongClick(AdapterView<?> parent, View view, int position, long id) {
