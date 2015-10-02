@@ -84,7 +84,7 @@ public class DbAdapter {
     public synchronized long removeEntry(NoteEntity entity){
         return mDb.delete(DbConst.TABLE_NOTES,
                 String.format(DbConst.EQUALS_EXPRESSION, DbConst.COLUMN_ID),
-                new String[]{Integer.toString(entity.getId())});
+                new String[]{Long.toString(entity.getId())});
     }
 
     public synchronized long removeEntries(Collection<NoteEntity> entities){
@@ -103,7 +103,7 @@ public class DbAdapter {
         cv.put(DbConst.COLUMN_TEXT, entity.getText());
         return mDb.update(DbConst.TABLE_NOTES, cv,
                 String.format(DbConst.EQUALS_EXPRESSION, DbConst.COLUMN_ID),
-                new String[]{Integer.toString(entity.getId())});
+                new String[]{Long.toString(entity.getId())});
     }
 
     /**
@@ -188,7 +188,7 @@ public class DbAdapter {
         return new NoteEntity(cursor.getInt(0));
     }
 
-    public synchronized NoteEntity getEntityToView(int id){
+    public synchronized NoteEntity getEntityToView(long id){
         Cursor cursor = mDb.rawQuery(DbConst.Q_SELECT_ENTRY_TO_VIEW + id, null);
         if(cursor == null || cursor.getCount() != 1){
             return null;

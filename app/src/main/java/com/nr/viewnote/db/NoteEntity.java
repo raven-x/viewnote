@@ -6,7 +6,7 @@ import java.util.Date;
  * Note entry for CRUD queries
  */
 public class NoteEntity {
-    private final int mId;
+    private final long mId;
     private byte[] mImage;
     private byte[] mThumb;
     private String mText;
@@ -16,11 +16,11 @@ public class NoteEntity {
      * Constructor for creating some entry existing in database
      * @param id
      */
-    public NoteEntity(int id) {
+    public NoteEntity(long id) {
         mId = id;
     }
 
-    public int getId() {
+    public long getId() {
         return mId;
     }
 
@@ -69,6 +69,6 @@ public class NoteEntity {
 
     @Override
     public int hashCode() {
-        return mId;
+        return (int) (mId ^ (mId >>> 32));
     }
 }

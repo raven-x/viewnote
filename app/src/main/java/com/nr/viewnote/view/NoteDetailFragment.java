@@ -34,7 +34,7 @@ public class NoteDetailFragment extends RoboFragment {
     @InjectView(R.id.txtNoteText)
     private TextView editText;
 
-    private Integer id;
+    private Long id;
 
     public NoteDetailFragment() {}
 
@@ -54,10 +54,10 @@ public class NoteDetailFragment extends RoboFragment {
 
     private void setOnCreate(Bundle savedInstanceState) {
         if(getActivity().getIntent() != null && getActivity().getIntent().getExtras() != null) {
-            id = getActivity().getIntent().getExtras().getInt(Const.ENTITY_ID);
+            id = getActivity().getIntent().getExtras().getLong(Const.ENTITY_ID);
         }
         if(id == null && savedInstanceState != null){
-            id = savedInstanceState.getInt(Const.ENTITY_ID);
+            id = savedInstanceState.getLong(Const.ENTITY_ID);
         }
 
         if(id != null) {
@@ -72,7 +72,7 @@ public class NoteDetailFragment extends RoboFragment {
         editText.setEnabled(true);
     }
 
-    public void setView(int id){
+    public void setView(long id){
         this.id = id;
         setView();
     }
@@ -80,7 +80,7 @@ public class NoteDetailFragment extends RoboFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if(id != null) {
-            outState.putInt(Const.ENTITY_ID, id);
+            outState.putLong(Const.ENTITY_ID, id);
         }
         super.onSaveInstanceState(outState);
     }

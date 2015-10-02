@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 
 import com.nr.viewnote.R;
@@ -105,6 +104,10 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
         mListeners.clear();
     }
 
+    public boolean hasChecked(){
+        return adapter.hasChecked();
+    }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {}
 
@@ -119,8 +122,13 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
     }
 
     public void notifyDataSetChanged(){
+        clearChecked();
         getLoaderManager().restartLoader(0, null, this);
         adapter.notifyDataSetChanged();
+    }
+
+    public void clearChecked(){
+        adapter.clearChecked();
     }
 
     public void filter(CharSequence constraint){

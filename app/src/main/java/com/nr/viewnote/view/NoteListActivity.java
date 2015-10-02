@@ -34,6 +34,7 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     private SearchView mSearchView;
     private NoteListMode mMode;
     private RetainedTaskFragment mRetainedTaskFragment;
+    private String filterText;
     private final Set<NoteEntity> mCheckedNotes = new HashSet<>();
 
     @Override
@@ -105,6 +106,7 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     public void onItemLongClick(AdapterView<?> parent, View view, NoteEntity entity, long id) {
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.chkNote);
         checkBox.setChecked(!checkBox.isChecked());
+        updateViewState();
     }
 
     @Override
@@ -127,7 +129,7 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
     }
 
     private void updateViewState() {
-        mRemoveMenuItem.setVisible(!mCheckedNotes.isEmpty());
+        mRemoveMenuItem.setVisible(mNoteListFragment.hasChecked());
     }
 
     /**
@@ -160,6 +162,7 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
 
         @Override
         public boolean onQueryTextChange(String newText) {
+            filterText = newText;
             mNoteListFragment.filter(newText);
             return false;
         }
@@ -186,8 +189,13 @@ public class NoteListActivity extends RoboGuiceAppCompatActivity implements INot
         @Override
         protected void onPostExecute(Object integer) {
             super.onPostExecute(integer);
-            mNoteListFragment.notifyDataSetChanged();
             mCheckedNotes.clear();
+            if(NoteListMode.FILTER == mMode){
+                mNoteListFragment.clearChecked();
+                mNoteListFragment.filter(filterText);
+            }else {
+                mNoteListFragment.notifyDataSetChanged();
+            }
             startMode(NoteListMode.NORMAL);
         }
     }

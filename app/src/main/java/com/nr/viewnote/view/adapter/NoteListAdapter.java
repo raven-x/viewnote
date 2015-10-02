@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
@@ -18,13 +19,17 @@ import com.nr.viewnote.db.DbAdapter;
 import com.nr.viewnote.db.NoteEntity;
 import com.nr.viewnote.view.INoteListFragmentListener;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by vkirillov on 21.09.2015.
  */
-public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnCheckedChangeListener{
+public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnCheckedChangeListener,
+        AdapterView.OnItemLongClickListener{
+
+    /**Saves if item is checked between datasource changes*/
+    private final Set<Long> mCheckedItems = new HashSet<>();
 
     private INoteListFragmentListener listener;
 
@@ -51,6 +56,9 @@ public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnC
             txtNote.setText(note.getText());
             txtDate.setText(Const.SMPL_DATE_FORMAT.format(note.getDate()));
             view.setTag(note);
+            if(mCheckedItems.contains(note.getId())){
+                checkBox.setChecked(true);
+            }
             checkBox.setOnCheckedChangeListener(this);
         }
     }
@@ -59,12 +67,45 @@ public class NoteListAdapter extends CursorAdapter implements CompoundButton.OnC
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         View parent = (View) buttonView.getParent();
         NoteEntity entity = (NoteEntity) parent.getTag();
+        saveCheckedState(entity, isChecked);
         if(listener != null){
             listener.onItemCheckStateChanged(parent, entity, isChecked);
         }
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        NoteEntity entity = (NoteEntity) view.getTag();
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.chkNote);
+        saveCheckedState(entity, checkBox.isChecked());
+        return false;
+    }
+
     public void setListener(INoteListFragmentListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Clears checked items state
+     */
+    public void clearChecked(){
+        mCheckedItems.clear();
+    }
+
+    /**
+     * Returns if there are checked items in list
+     * @return true, if some items were checked;
+     *  false otherwise
+     */
+    public boolean hasChecked() {
+        return !mCheckedItems.isEmpty();
+    }
+
+    private void saveCheckedState(NoteEntity entity, boolean isChecked) {
+        if(isChecked){
+            mCheckedItems.add(entity.getId());
+        }else {
+            mCheckedItems.remove(entity.getId());
+        }
     }
 }
