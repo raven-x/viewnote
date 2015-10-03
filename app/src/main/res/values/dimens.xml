@@ -9,4 +9,5 @@
     <dimen name="note_editing_textbox_bottom_margin">10dp</dimen>
     <dimen name="note_view_textbox_margin">2dp</dimen>
     <dimen name="toolbar_min_height">56dp</dimen>
+    <dimen name="note_record_button_bottom">3dp</dimen>
 </resources>

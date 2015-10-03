@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/noterecord_button"
             android:text="record"/>
 
         <Button android:id="@+id/btnApplyNoteText"
@@ -34,13 +35,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
                 android:text="apply"
+                android:background="@drawable/noterecord_button"
             />
 
         <Button android:id="@+id/btnCancelNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="cancel"/>
+            android:text="cancel"
+                android:background="@drawable/noterecord_button"
+            />
 
     </LinearLayout>
 

@@ -6,7 +6,7 @@
         <layer-list>
 
             <!-- Content layer -->
-            <item android:drawable="@drawable/button_pressed_layer"/>
+            <item android:drawable="@drawable/main_button_pressed_layer"/>
 
             <!-- Icon layer -->
             <item>
@@ -23,10 +23,10 @@
             <!-- Shadow layer -->
             <item android:left="@dimen/button_shadow_layer_left_margin"
                 android:top="@dimen/button_shadow_layer_top_margin"
-                android:drawable="@drawable/button_shadow_layer"/>
+                android:drawable="@drawable/main_button_shadow_layer"/>
 
             <!-- Content layer -->
-            <item android:drawable="@drawable/button_default_layer"/>
+            <item android:drawable="@drawable/main_button_default_layer"/>
 
             <!-- Icon layer -->
             <item>
