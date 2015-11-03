@@ -27,6 +27,7 @@ public final class DbConst {
                     " %s INTEGER)",
                     TABLE_NOTES, COLUMN_ID, COLUMN_PICTURE,
                     COLUMN_THUMBNAIL, COLUMN_TEXT, COLUMN_DATE);
+
     static final String Q_DROP_NOTES_TABLE = String.format("DROP TABLE IF EXISTS %s", TABLE_NOTES);
 
     static final String Q_GET_ALL_DATA = String.format("SELECT %s, %s, %s, %s FROM %s",
@@ -39,12 +40,6 @@ public final class DbConst {
     static final String Q_SELECT_LAST_ENTRY = String.format(
             "SELECT %s FROM %s WHERE %s = (SELECT MAX(%s) FROM %s)",
             COLUMN_ID, TABLE_NOTES, COLUMN_DATE, COLUMN_DATE, TABLE_NOTES);
-
-    /**Returns range of entries*/
-    static final String Q_SELECT_ENTRIES_FROM_AND_TO = String.format(
-            "SELECT %s, %s, %s, %s FROM %s ORDER BY %s ASC LIMIT",
-            COLUMN_ID, COLUMN_THUMBNAIL, COLUMN_TEXT, COLUMN_DATE,
-            TABLE_NOTES, COLUMN_DATE);
 
     /**Returns entry to view and edit*/
     static final String Q_SELECT_ENTRY_TO_VIEW = String.format(

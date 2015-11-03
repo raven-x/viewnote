@@ -1,9 +1,14 @@
 package com.nr.viewnote.view;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +26,7 @@ import roboguice.inject.InjectView;
 
 public class MainActivity extends RoboGuiceAppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int CAMERA_PERMISSION_REQUEST_RESULT = 1;
 
     @InjectView(R.id.btn_create_new)
     private Button mBtnCreateNew;
@@ -91,13 +97,58 @@ public class MainActivity extends RoboGuiceAppCompatActivity {
     }
 
     private void onCreateNew(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(intent.resolveActivity(getPackageManager()) != null){
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        int permissionCheckResult = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        //Android 6.0 permission check
+        if(PackageManager.PERMISSION_GRANTED == permissionCheckResult){
+            createNew();
+        }else{
+            requestCameraPermission();
+        }
+    }
+
+    private void requestCameraPermission(){
+        //In case user checked "Never ask again"
+        if(!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)){
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.camera_permission_rationale)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.CAMERA},
+                                CAMERA_PERMISSION_REQUEST_RESULT);
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .create()
+                    .show();
+        }else{
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST_RESULT);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if(CAMERA_PERMISSION_REQUEST_RESULT == requestCode){
+            // If request is cancelled, the result arrays are empty
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                createNew();
+            }else {
+                //Disable functionality
+                ToastUtils.showToastLong(this, R.string.camera_pemission_denied);
+                mBtnCreateNew.setEnabled(false);
+            }
         }
     }
 
     private void onView(){
         startActivity(new Intent(this, NoteListActivity.class));
+    }
+
+    private void createNew() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(intent.resolveActivity(getPackageManager()) != null){
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 }

@@ -26,34 +26,6 @@ public class DatabaseTest extends AndroidTestCase {
         mDbAdapter.clearAll();
     }
 
-    public void testAddEntry() {
-        assertEquals(TestConst.TEST_ID1, mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1));
-        assertEquals(TestConst.TEST_ID2, mDbAdapter.addEntry(TestConst.ENTRY2, TestConst.ENTRY1, TestConst.TEXT2));
-
-        List<NoteEntity> result = mDbAdapter.getAllData();
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
-        assertEquals(2, result.size());
-
-        NoteEntity entity = result.get(0);
-        assertEquals(TestConst.TEST_ID1, entity.getId());
-        assertEquals(3, entity.getImage().length);
-        assertEquals(1, entity.getImage()[0]);
-        assertEquals(2, entity.getImage()[1]);
-        assertEquals(3, entity.getImage()[2]);
-        assertEquals(TestConst.TEXT1, entity.getText());
-        assertNotNull(entity.getDate());
-
-        entity = result.get(1);
-        assertEquals(TestConst.TEST_ID2, entity.getId());
-        assertEquals(3, entity.getImage().length);
-        assertEquals(3, entity.getImage()[0]);
-        assertEquals(2, entity.getImage()[1]);
-        assertEquals(1, entity.getImage()[2]);
-        assertEquals(TestConst.TEXT2, entity.getText());
-        assertNotNull(entity.getDate());
-    }
-
     public void testRemoveEntry(){
         mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1);
 
@@ -122,7 +94,7 @@ public class DatabaseTest extends AndroidTestCase {
         mDbAdapter.addEntry(TestConst.ENTRY1, TestConst.ENTRY1, TestConst.TEXT1);
         mDbAdapter.addEntry(TestConst.ENTRY2, TestConst.ENTRY1, TestConst.TEXT2);
 
-        NoteEntity result = mDbAdapter.getLastEntry();
+        NoteEntity result = mDbAdapter.getLastEditedEntry();
 
         assertNotNull(result);
     }
@@ -132,4 +104,5 @@ public class DatabaseTest extends AndroidTestCase {
         mDbAdapter.close();
         super.tearDown();
     }
+
 }

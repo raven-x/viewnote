@@ -60,11 +60,8 @@ public class NoteEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         NoteEntity entity = (NoteEntity) o;
-
         return mId == entity.mId;
-
     }
 
     @Override

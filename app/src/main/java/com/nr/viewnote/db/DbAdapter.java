@@ -20,6 +20,11 @@ public class DbAdapter {
     private static DbAdapter mSelf;
     private static boolean isOpened;
 
+    /**
+     * Singleton getInstance method
+     * @param context current context
+     * @return singleton database adapter object
+     */
     public static synchronized DbAdapter getInstance(Context context){
         if(mSelf == null){
             mSelf = new DbAdapter(context);
@@ -50,7 +55,7 @@ public class DbAdapter {
     }
 
     /**
-     * Closes current connection
+     * Closes the current connection
      */
     public synchronized void close(){
         mDbHelper.close();
@@ -58,12 +63,11 @@ public class DbAdapter {
     }
 
     /**
-     * Adds a new entry to database
-     * @param image
-     * @return
+     * Adds a new entry to database with empty text by default
+     * @param image image data
      */
     public synchronized long addEntry(byte[] image, byte[] thumb){
-        return addEntry(image, thumb, "" );
+        return addEntry(image, thumb, "");
     }
 
     /**
@@ -81,23 +85,35 @@ public class DbAdapter {
         return mDb.insert(DbConst.TABLE_NOTES, null, cv);
     }
 
+    /**
+     * Removes a single entity
+     * @param entity entity to remove
+     */
     public synchronized long removeEntry(NoteEntity entity){
         return mDb.delete(DbConst.TABLE_NOTES,
                 String.format(DbConst.EQUALS_EXPRESSION, DbConst.COLUMN_ID),
                 new String[]{Long.toString(entity.getId())});
     }
 
+    /**
+     * Remove collection of entities
+     * @param entities collection of entities
+     */
     public synchronized long removeEntries(Collection<NoteEntity> entities){
         StringBuilder ids = new StringBuilder("(");
         for(NoteEntity entity : entities){
             ids.append(entity.getId()).append(",");
         }
         ids.setLength(ids.length() - 1);
-        ids.append(")" );
+        ids.append(")");
         return mDb.delete(DbConst.TABLE_NOTES,
                 String.format(DbConst.IN_EXPRESSION, DbConst.COLUMN_ID, ids.toString()), null);
     }
 
+    /**
+     * Updates current note text
+     * @param entity note entity
+     */
     public synchronized long updateEntryText(NoteEntity entity){
         ContentValues cv = new ContentValues();
         cv.put(DbConst.COLUMN_TEXT, entity.getText());
@@ -108,9 +124,10 @@ public class DbAdapter {
 
     /**
      * Returns all data as list
-     * @return list of data
+     * It's a waste of resources to load all fields at once
+     * so it's newer used but only in tests
+     * @return list of note entities
      */
-    @Deprecated
     public synchronized List<NoteEntity> getAllData(){
         Cursor cursor = getAllCursor();
         if(cursor == null){
@@ -126,7 +143,12 @@ public class DbAdapter {
         return result;
     }
 
-    @Deprecated
+    /**
+     * Return cursor with a complete set of data
+     * It's a waste of resources to load all fields at once
+     * so it's newer used but only in tests
+     * @return cursor with data
+     */
     public synchronized Cursor getAllCursor(){
         Cursor cursor = mDb.rawQuery(DbConst.Q_GET_ALL_DATA, null);
         if(cursor != null) {
@@ -136,6 +158,10 @@ public class DbAdapter {
         return null;
     }
 
+    /**
+     * Returns cursor for viewing data in listview
+     * @return cursor cursor with data
+     */
     public synchronized Cursor getAllDataToShowInListCursor(){
         return mDb.query(
                 false,
@@ -146,6 +172,11 @@ public class DbAdapter {
                 null, null, null, null, null, null);
     }
 
+    /**
+     * Filters data using message text as constraint
+     * @param constraint message text
+     * @return cursor with filtered data
+     */
     public synchronized Cursor getFilteredData(String constraint){
         return mDb.query(
                 false,
@@ -154,21 +185,14 @@ public class DbAdapter {
                         DbConst.COLUMN_ID, DbConst.COLUMN_THUMBNAIL,
                         DbConst.COLUMN_TEXT, DbConst.COLUMN_DATE},
                 DbConst.COLUMN_TEXT + " LIKE ?",
-                new String[]{"%" + constraint + "%"},
+                new String[]{String.format("%%s%", constraint)},
                 null, null, null, null);
     }
 
-    public synchronized Cursor getFromAndToCursor(int from, int to){
-        String query = String.format("%s %s, %s", DbConst.Q_SELECT_ENTRIES_FROM_AND_TO,
-                Integer.toString(from), Integer.toString(to));
-        Cursor cursor = mDb.rawQuery(query, null);
-        if(cursor != null) {
-            cursor.moveToFirst();
-            return cursor;
-        }
-        return null;
-    }
-
+    /**
+     * Clears all data
+     * @return query result
+     */
     public synchronized long clearAll(){
         return mDb.delete(DbConst.TABLE_NOTES, null, null);
     }
@@ -179,7 +203,7 @@ public class DbAdapter {
      * on the previous step and now we are going to add a text note.
      * @return entry with only entry id loaded
      */
-    public synchronized NoteEntity getLastEntry(){
+    public synchronized NoteEntity getLastEditedEntry(){
         Cursor cursor = mDb.rawQuery(DbConst.Q_SELECT_LAST_ENTRY, null);
         if(cursor == null || cursor.getCount() != 1){
             return null;
@@ -188,6 +212,11 @@ public class DbAdapter {
         return new NoteEntity(cursor.getInt(0));
     }
 
+    /**
+     * Extracts set of fields needed to make a detail view
+     * @param id entity id
+     * @return note entity with id, image and text fields filled
+     */
     public synchronized NoteEntity getEntityToView(long id){
         Cursor cursor = mDb.rawQuery(DbConst.Q_SELECT_ENTRY_TO_VIEW + id, null);
         if(cursor == null || cursor.getCount() != 1){
@@ -200,6 +229,11 @@ public class DbAdapter {
         return result;
     }
 
+    /**
+     * Extracts set of fields to add item into listview
+     * @param cursor cursor
+     * @return note entity with id, thumb, text and date fields filled
+     */
     public static NoteEntity extractEntityForNoteList(Cursor cursor) {
         Calendar calendar = Calendar.getInstance();
         if(cursor.getCount() > 0) {

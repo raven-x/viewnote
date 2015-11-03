@@ -75,7 +75,7 @@ public class SoundRecordActivity extends RoboGuiceAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mNote = DbAdapter.getInstance(this).getLastEntry();
+        mNote = DbAdapter.getInstance(this).getLastEditedEntry();
         if(mNote == null){
             ToastUtils.showToastLong(this, R.string.db_load_last_entry_error);
             btnRecord.setEnabled(false);

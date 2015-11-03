@@ -15,4 +15,8 @@
     <string name="db_save_error">An error occurred while saving entry to database</string>
     <string name="db_load_last_entry_error">An error occured while loading editable entry from database</string>
     <string name="speech_activity_error">Speech is not supported</string>
+    <string name="camera_pemission_denied">Camera permission denied</string>
+    <string name="camera_permission_rationale">You need to allow access to Camera in order to make a visual note</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
