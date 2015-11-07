@@ -10,7 +10,7 @@
 
             <!-- Icon layer -->
             <item>
-                <bitmap android:gravity="center" android:src="@drawable/view_note_icons"/>
+                <bitmap android:gravity="center" android:src="@drawable/list"/>
             </item>
 
         </layer-list>
@@ -30,7 +30,7 @@
 
             <!-- Icon layer -->
             <item>
-                <bitmap android:gravity="center" android:src="@drawable/view_note_icons"/>
+                <bitmap android:gravity="center" android:src="@drawable/list"/>
             </item>
 
         </layer-list>

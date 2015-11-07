@@ -33,6 +33,7 @@
         style="@style/NoteEntryDate"
         android:text="sample date"/>
 
+    <!-- Focusable item must not be focusable to make listview item clickable-->
     <CheckBox
         android:id="@+id/chkNote"
         android:layout_alignParentRight="true"
