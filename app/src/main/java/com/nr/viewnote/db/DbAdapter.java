@@ -185,7 +185,7 @@ public class DbAdapter {
                         DbConst.COLUMN_ID, DbConst.COLUMN_THUMBNAIL,
                         DbConst.COLUMN_TEXT, DbConst.COLUMN_DATE},
                 DbConst.COLUMN_TEXT + " LIKE ?",
-                new String[]{String.format("%%s%", constraint)},
+                new String[]{"%" + constraint + "%"},
                 null, null, null, null);
     }
 

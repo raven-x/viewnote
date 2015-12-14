@@ -9,7 +9,7 @@ import roboguice.inject.InjectView;
 
 public class NoteDetailActivity extends RoboGuiceAppCompatActivity {
 
-    @InjectView(R.id.main_toolbar)
+    @InjectView(R.id.common_toolbar)
     private Toolbar mToolbar;
 
     @Override

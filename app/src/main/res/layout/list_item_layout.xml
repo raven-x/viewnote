@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="88dp"
     android:minHeight="88dp">
@@ -32,6 +33,7 @@
         style="@style/NoteEntryDate"
         android:text="sample date"/>
 
+    <!-- Focusable item must not be focusable to make listview item clickable-->
     <CheckBox
         android:id="@+id/chkNote"
         android:layout_alignParentRight="true"
@@ -39,6 +41,7 @@
         android:layout_height="wrap_content"
         android:paddingRight="16dp"
         android:layout_centerVertical="true"
+        android:focusable="false"
         />
 
 </RelativeLayout>
