@@ -67,9 +67,11 @@ public class NoteDetailFragment extends RoboFragment {
 
     private void setView() {
         NoteEntity entity = DbAdapter.getInstance(getActivity()).getEntityToView(id);
-        imageView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(entity.getImage()));
-        editText.setText(entity.getText());
-        editText.setEnabled(true);
+        if(entity != null && entity.getImage() != null) {
+            imageView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(entity.getImage()));
+            editText.setText(entity.getText());
+            editText.setEnabled(true);
+        }
     }
 
     public void setView(long id){
