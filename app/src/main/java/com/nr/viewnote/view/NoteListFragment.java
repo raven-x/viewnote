@@ -17,6 +17,7 @@ import com.nr.viewnote.db.NoteCursorLoader;
 import com.nr.viewnote.db.NoteEntity;
 import com.nr.viewnote.view.adapter.NoteListAdapter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
 
     private NoteListAdapter adapter;
 
-    private final List<INoteListFragmentListener> mListeners = new LinkedList<>();
+    private final List<INoteListFragmentListener> mListeners = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class NoteListFragment extends RoboFragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        adapter.changeCursor(cursor);
+        adapter.swapCursor(cursor);
     }
 
     private void clearListeners(){

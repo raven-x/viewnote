@@ -2,19 +2,13 @@ package com.nr.viewnote.view;
 
 
 import android.app.Fragment;
-import android.graphics.PointF;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.nr.androidutils.BitmapUtils;
 import com.nr.viewnote.Const;
 import com.nr.viewnote.R;
@@ -35,7 +29,7 @@ import roboguice.inject.InjectView;
 public class NoteDetailFragment extends RoboFragment {
 
     @InjectView(R.id.imgNoteImage)
-    private TouchImageView imageView;
+    private ScaleImageView imageView;
 
     @InjectView(R.id.txtNoteText)
     private TextView editText;
@@ -73,14 +67,11 @@ public class NoteDetailFragment extends RoboFragment {
 
     private void setView() {
         NoteEntity entity = DbAdapter.getInstance(getActivity()).getEntityToView(id);
-//        imageView.setZoomEnabled(true);
-//        imageView.setPanEnabled(true);
-//        imageView.setQuickScaleEnabled(true);
-//        imageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
-        //imageView.setImage(ImageSource.bitmap(BitmapUtils.convertCompressedByteArrayToBitmap(entity.getImage())));
-        imageView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(entity.getImage()));
-        editText.setText(entity.getText());
-        editText.setEnabled(true);
+        if(entity != null && entity.getImage() != null) {
+            imageView.setImageBitmap(BitmapUtils.convertCompressedByteArrayToBitmap(entity.getImage()));
+            editText.setText(entity.getText());
+            editText.setEnabled(true);
+        }
     }
 
     public void setView(long id){
