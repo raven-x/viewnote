@@ -1,5 +1,4 @@
 package com.nr.viewnote.view;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -8,9 +7,10 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
-public class ScaleImageView extends ImageView implements View.OnTouchListener {
+public class ScaleImageView extends ImageView implements OnTouchListener {
     private Context mContext;
     private float MAX_SCALE = 2f;
 
@@ -199,7 +199,8 @@ public class ScaleImageView extends ImageView implements View.OnTouchListener {
         int touchCount = event.getPointerCount();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_POINTER_DOWN:
+            case MotionEvent.ACTION_POINTER_1_DOWN:
+            case MotionEvent.ACTION_POINTER_2_DOWN:
                 if (touchCount >= 2) {
                     float distance = distance(event.getX(0), event.getX(1), event.getY(0), event.getY(1));
                     mPrevDistance = distance;
@@ -228,6 +229,7 @@ public class ScaleImageView extends ImageView implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
+            case MotionEvent.ACTION_POINTER_2_UP:
                 if (event.getPointerCount() <= 1) {
                     isScaling = false;
                 }
